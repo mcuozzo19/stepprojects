@@ -1,40 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+  
   <title>Portfolio</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel ="stylesheet" href = "style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column1 {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  
+}
+.column2 {
+  float: left;
+  width: 80%;
+  padding: 10px;
+  
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
 </head>
 <body>
 
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Wea>
+      <a class="navbar-brand" href="#">Madeline Cuozzo</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Home</a></li>
-      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1 <span class="caret"></span></a>
+      <li class="active"><a href="#">About Me</a></li>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Hobbies<span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="#">Page 1-1</a></li>
-          <li><a href="#">Page 1-2</a></li>
-          <li><a href="#">Page 1-3</a></li>
+          <li><a href="#">Coding</a></li>
+          <li><a href="#">Sports</a></li>
+          <li><a href="#">Violin</a></li>
         </ul>
       </li>
-      <li><a href="#">Page 2</a></li>
-      <li><a href="#">Page 3</a></li>
+      <li><a href="./gallery.html">Gallery</a></li>
+      <li><a href="#">Contact Me</a></li>
     </ul>
   </div>
 </nav>
-  
-<div class="container">
-  <h3>Navbar With Dropdown</h3>
-  <p>This example adds a dropdown menu for the "Page 1" button in the navigation bar.</p>
-</div>
 
+<div class="main-container">
+     
+    <div class="row">
+        <div class="column1">
+            <div class="profile">
+             <img src = "../images/Cuozzo.jpeg" style ="border-radius: 8px; width: 90%; margin-left: 20px;">
+            </div> 
+        </div>
+        <div class="column2" style="align-content: left">
+            <h2>About Me</h2>
+            <p>Welcome to my portfolio! My name is Madeline Cuozzo. 
+            Born in Bahrain, raised in Singapore, educated at Duke University, it has been a wild ride. 
+            I live fearlessly and wear my heart on my sleeves, whether I am on my daily sunrise runs, coding 
+            a new project, studying for an exam, or having a laugh with my friends. This website is just a peak into my life.
+            Enjoy!</p>
+        </div>
+    </div>
+
+</div>
 </body>
 </html>
 
