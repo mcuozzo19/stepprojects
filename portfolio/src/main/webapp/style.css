@@ -12,6 +12,35 @@
 align-content: left;
 height: 500px;
 }
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column1 {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  
+}
+.column2 {
+  float: left;
+  width: 80%;
+  padding: 10px;
+  
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+body{
+    font-family: Georgia, serif;
+    font-size:  18px;
+}
 
 .row {
   display: flex;
@@ -136,3 +165,5 @@ height: 500px;
     width: 100%;
   }
 }
+
+
