@@ -16,13 +16,26 @@
  * Adds server content to page
  */
 function getGreeting() {
-  console.log('Fetching greeting.');
+  fetch('/data').then(response => response.json()).then((greetings) => {
+    // stats is an object, not a string, so we have to
+    // reference its fields to create HTML content
 
-  // The fetch() function returns a Promise because the request is asynchronous.
-  const responsePromise = fetch('/data');
+    const greetingListElement = document.getElementById('greeting-container');
+    greetingListElement.innerHTML = '';
+    greetingListElement.appendChild(
+        createListElement('Greeting1: ' + greetings[0]));
+    greetingListElement.appendChild(
+        createListElement('Greeting2: ' + greetings[1]));
+    greetingListElement.appendChild(
+        createListElement('Greeting3: ' + greetings[2]));
+  });
+}
 
-  // When the request is complete, pass the response into handleResponse().
-  responsePromise.then(handleResponse);
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
 }
 
 /**
