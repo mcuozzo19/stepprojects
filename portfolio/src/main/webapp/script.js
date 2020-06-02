@@ -15,20 +15,15 @@
 /**
  * Adds server content to page
  */
-function getGreeting() {
-  fetch('/data').then(response => response.json()).then((greetings) => {
-    // stats is an object, not a string, so we have to
-    // reference its fields to create HTML content
+function getComments() {
+  fetch('/comment').then(response => response.json()).then((comments) => {
 
-    const greetingListElement = document.getElementById('greeting-container');
-    greetingListElement.innerHTML = '';
-    greetingListElement.appendChild(
-        createListElement('Greeting1: ' + greetings[0]));
-    greetingListElement.appendChild(
-        createListElement('Greeting2: ' + greetings[1]));
-    greetingListElement.appendChild(
-        createListElement('Greeting3: ' + greetings[2]));
+    const commentListElement = document.getElementById('comment-container');
+    commentListElement.innerHTML = '';
+    comments.forEach((line) => {
+      commentListElement.appendChild(createListElement(line));
   });
+});
 }
 
 /** Creates an <li> element containing text. */
@@ -51,13 +46,12 @@ function handleResponse(response) {
 
   // When the response is converted to text, pass the result into the
   // addQuoteToDom() function.
-  textPromise.then(addGreetingToDom);
+  textPromise.then(addCommentToDom);
 }
 
-/** Adds a random quote to the DOM. */
-function addGreetingToDom(greeting) {
-  console.log('Adding greeting to dom: ' + greeting);
+function addCommentToDom(comment) {
+  console.log('Adding greeting to dom: ' + comment);
 
-  const quoteContainer = document.getElementById('greeting-container');
-  quoteContainer.innerText = greeting;
+  const commentContainer = document.getElementById('comment-container');
+  commentContainer.innerText = comment;
 }

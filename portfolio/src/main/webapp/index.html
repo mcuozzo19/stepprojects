@@ -12,7 +12,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body onload="getComments()">
 
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
@@ -50,8 +50,15 @@
             Enjoy!</p>
         </div>
     </div>
-<button onclick="getGreeting()">Get server content!</button>
-<div id="greeting-container"></div>
+<form action="/comment" method="POST">
+
+      <p>Comment:</p>
+      <input type="text" name="my-comment" value="Comment Here">
+      <br/><br/>
+
+      <input type="submit" />
+    </form>
+<div id="comment-container"></div>
 </div>
 </body>
 </html>
