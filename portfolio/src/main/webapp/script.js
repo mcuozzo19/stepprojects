@@ -16,7 +16,15 @@
  * Adds server content to page
  */
 function getComments() {
-  fetch('/comment').then(response => response.json()).then((comments) => {
+    var queryString = window.location.search;
+    console.log(queryString);    
+    const urlParams = new URLSearchParams(queryString);
+    var maxComments = urlParams.get('quantity')
+    if(maxComments==null){
+        maxComments=5;
+    }
+    console.log(maxComments);
+  fetch('/comment?maxComments='+ maxComments).then(response => response.json()).then((comments) => {
 
     const commentListElement = document.getElementById('comment-container');
     commentListElement.innerHTML = '';

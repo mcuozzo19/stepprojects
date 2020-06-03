@@ -14,7 +14,11 @@
 
 package com.google.sps.servlets;
 
-import com.google.appengine.api.datastore.Entity;
+
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -37,13 +41,18 @@ public class DataServlet extends HttpServlet {
  
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+     String maxCommentsString = request.getParameter("maxComments");
+
+    // Convert the input to an int.
+    int maxComments = Integer.parseInt(maxCommentsString);;
+    
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     ArrayList<String> comments = new ArrayList<>();
-    for (Entity entity : results.asIterable()) {
+    for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(maxComments))) {
       
       String text = (String) entity.getProperty("text");
       
