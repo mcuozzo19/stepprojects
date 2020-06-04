@@ -30,8 +30,8 @@ function getComments() {
     commentListElement.innerHTML = '';
     comments.forEach((line) => {
       commentListElement.appendChild(createListElement(line));
+   });
   });
-});
 }
 
 /** Creates an <li> element containing text. */
@@ -41,6 +41,16 @@ function createListElement(text) {
   return liElement;
 }
 
+function deleteComments(){
+    fetch('/delete').then(response => response.json()).then((comments) => {
+
+    const commentListElement = document.getElementById('comment-container');
+    commentListElement.innerHTML = '';
+    comments.forEach((line) => {
+      commentListElement.appendChild(createListElement(line));
+   });
+  });
+}
 /**
  * Handles response by converting it to text and passing the result to
  * addQuoteToDom().

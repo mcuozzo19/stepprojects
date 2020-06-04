@@ -17,6 +17,7 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
 import com.google.appengine.api.datastore.PreparedQuery;
@@ -35,54 +36,23 @@ import java.util.Arrays;
 import com.google.gson.Gson; 
 
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/comment")
-public class DataServlet extends HttpServlet {
- 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-     String maxCommentsString = request.getParameter("maxComments");
 
-    // Convert the input to an int.
-    int maxComments = Integer.parseInt(maxCommentsString);;
-    
-    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+
+@WebServlet("/delete")
+public class DeleteServlet extends HttpServlet {
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
+     for (Entity entity : results.asIterable()) {
+       long id = entity.getKey().getId();
+       Key taskEntityKey = KeyFactory.createKey("Comment", id);
+       datastore.delete(taskEntityKey);
+     }
 
-    ArrayList<String> comments = new ArrayList<>();
-    for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(maxComments))) {
-      
-      String text = (String) entity.getProperty("text");
-      
-      comments.add(text);
+        response.sendRedirect("/index.html");
+
     }
-
-    Gson gson = new Gson();
-
-    response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(comments));
-  }
-
-
-
-    @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    // Get the input from the form.
-    String newComment = request.getParameter("my-comment");
-    long timestamp = System.currentTimeMillis();
-    Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("text", newComment);
-    commentEntity.setProperty("timestamp", timestamp);
-    
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(commentEntity);
-    response.sendRedirect("/index.html");
-  }
 }
-
-  
-
-
