@@ -57,8 +57,9 @@ public class DataServlet extends HttpServlet {
     for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(maxComments))) {
       
       String text = (String) entity.getProperty("text");
-      
-      comments.add(text);
+       String email = (String) entity.getProperty("email");
+       String message = email + " : " + text;      
+      comments.add(message);
     }
 
     Gson gson = new Gson();
@@ -71,13 +72,24 @@ public class DataServlet extends HttpServlet {
 
     @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+     UserService userService = UserServiceFactory.getUserService();
+      
+      if (!userService.isUserLoggedIn()) {
+      response.sendRedirect("/comment");
+      return;
+    }
+
 
     // Get the input from the form.
     String newComment = request.getParameter("my-comment");
+    String email = userService.getCurrentUser().getEmail();
     long timestamp = System.currentTimeMillis();
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("text", newComment);
     commentEntity.setProperty("timestamp", timestamp);
+    commentEntity.setProperty("email", email);
+    
+
     
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
