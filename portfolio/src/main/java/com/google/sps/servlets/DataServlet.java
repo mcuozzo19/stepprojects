@@ -52,17 +52,21 @@ public class DataServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-
+     Gson gson = new Gson();
     ArrayList<String> comments = new ArrayList<>();
     for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(maxComments))) {
-      
-      String text = (String) entity.getProperty("text");
+      if(entity.getProperty("text") instanceof String){
+         String text = (String) entity.getProperty("text");
        String email = (String) entity.getProperty("email");
        String message = email + " : " + text;      
-      comments.add(message);
+      comments.add(message); 
+      }
+      else{
+     System.out.println("not a string");
+    }
     }
 
-    Gson gson = new Gson();
+    
 
     response.setContentType("application/json;");
     response.getWriter().println(gson.toJson(comments));
