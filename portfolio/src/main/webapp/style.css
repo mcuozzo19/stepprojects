@@ -31,13 +31,18 @@ height: 500px;
   height:50%;
   
 }
-.column3-commentSection {
-  align-content:center;
-  float: right;
-  width: 40%;
-  padding: 10px;
-  
+.submitCom{
+  width: 30%;
+  height: 500px;
+  float: left;
+  margin-left: 10px;
 }
+.displayCom {
+  width: 30%;
+  margin-left: 30%;
+  height: 500px;
+}
+
 .commentSection{
     float:center;
 }

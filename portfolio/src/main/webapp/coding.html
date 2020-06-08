@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <link rel ="stylesheet" href = "style.css">
+ 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   </head>
@@ -58,33 +59,7 @@
         <img class="modal-content" id="img01">
         <div id="caption"></div>
         </div>
-    <script>
-    // create references to the modal...
-    var modal = document.getElementById('myModal');
-    // to all images -- note I'm using a class!
-    var images = document.getElementsByClassName('myImages');
-    // the image in the modal
-    var modalImg = document.getElementById("img01");
-    // and the caption in the modal
-    var captionText = document.getElementById("caption");
-
-    // Go through all of the images with our custom class
-    for (var i = 0; i < images.length; i++) {
-    var img = images[i];
-    // and attach our click listener for this image.
-    img.onclick = function(evt) {
-    modal.style.display = "block";
-    modalImg.src = this.src;
-    captionText.innerHTML = this.alt;
-    }
-   }
-
-    var span = document.getElementsByClassName("close")[0];
-
-    span.onclick = function() {
-     modal.style.display = "none";
-    }
-    </script>
+   <script src = "coding.js"></script>
   </div>
  </body>
 </html>

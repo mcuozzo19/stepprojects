@@ -15,6 +15,31 @@
 /**
  * Adds server content to page
  */
+
+function loadPage(){
+    checkLogin();
+    getComments();
+    
+}
+function checkLogin(){
+    fetch('/check').then(function(response){
+        if(response.status==200){
+           document.getElementById("commentHere").style.visibility = "visible";
+        }
+        if(response.status==403){
+           document.getElementById("commentHere").style.visibility = "hidden";
+           const commentFormElement = document.getElementById('submitComment');
+          commentFormElement.innerHTML = '';
+          const aElement = document.createElement('a');
+          var link = document.createTextNode("Login Here");
+          aElement.appendChild(link);  
+          aElement.href=('/check');
+          aElement.title="Login Here"
+          commentFormElement.appendChild(aElement);
+        }
+    });
+
+}
 function getComments() {
     var queryString = window.location.search;
     console.log(queryString);    
