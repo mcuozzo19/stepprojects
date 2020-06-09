@@ -99,8 +99,35 @@ function addCommentToDom(comment) {
   commentContainer.innerText = comment;
 }
 
-function createMap() {
+  function createMap() {
   const map = new google.maps.Map(
       document.getElementById('map'),
-      {center: {lat: 37.422, lng: -122.084}, zoom: 16});
+      {center: {lat: 45.9506183, lng: 50.587189}, zoom: 1});
+
+  addLandmark(
+      map, 26.225457, 50.587189, 'Manama, Bahrain',
+      'I was born in Manama, Bahrain in 2000')
+  addLandmark(
+      map, 45.950618,2.498395, 'Sacile, Italy',
+      'A portion of my childhood was spent living in Italy')
+  addLandmark(
+      map, 38.831933, -77.255443, 'Fairfax, Virginia',
+      'The first place I moved in America');
+   addLandmark(
+      map, 1.428489, 103.776148, 'Singapore, Singapore',
+      'I consider Singapore my home');
+    addLandmark(
+      map, 29.757638, -95.362385, 'Houston, Texas',
+      'I currently live in Houston!');
+}
+
+
+function addLandmark(map, lat, lng, title, description) {
+  const marker = new google.maps.Marker(
+      {position: {lat: lat, lng: lng}, map: map, title: title});
+
+  const infoWindow = new google.maps.InfoWindow({content: description});
+  marker.addListener('click', () => {
+    infoWindow.open(map, marker);
+  });
 }
