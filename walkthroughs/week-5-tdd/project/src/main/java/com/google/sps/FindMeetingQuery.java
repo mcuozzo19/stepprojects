@@ -13,11 +13,48 @@
 // limitations under the License.
 
 package com.google.sps;
-
+import java.util.ArrayList;
 import java.util.Collection;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    throw new UnsupportedOperationException("TODO: Implement this method.");
+    Collection<String> attendeeCollection = request.getAttendees();
+    ArrayList<String> attendees = new ArrayList<>(attendeeCollection);
+    long duration = request.getDuration();
+    Collection<TimeRange> results= new ArrayList<TimeRange>();
+    ArrayList<Event> eventList = new ArrayList<>(events);
+    if (duration > TimeRange.WHOLE_DAY.duration()){
+        return results;
+    }
+    if(events.size()==0){
+        results.add(TimeRange.fromStartDuration(0, 24*60));
+        return results;
+    }
+    int currentStart = 0;
+    int currentEnd = 0;
+    for(int i = 0; i < eventList.size(); i++){
+        if(i - 1 >= 0 && eventList.get(i-1).getWhen().contains(eventList.get(i).getWhen())){
+            continue;
+        }
+        for (int j = 0; j < attendees.size(); j++ ){
+            if (eventList.get(i).getAttendees().contains(attendees.get(j))){
+                currentEnd = eventList.get(i).getWhen().start();
+                if(currentStart!=currentEnd && currentEnd-currentStart>=duration){
+                    TimeRange possibleTime = TimeRange.fromStartEnd(currentStart, currentEnd, false);
+                    results.add(possibleTime);
+                }
+                 currentStart= currentEnd+eventList.get(i).getWhen().duration();
+                    currentEnd = currentStart;
+            }
+
+        }
+    }
+    currentEnd=24*60;
+    if(currentStart!=currentEnd && currentEnd-currentStart>=duration){
+                    TimeRange possibleTime = TimeRange.fromStartEnd(currentStart, currentEnd, false);
+                    results.add(possibleTime);
+    }
+    return results;
   }
+
 }
