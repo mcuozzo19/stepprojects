@@ -32,12 +32,12 @@ public final class MeetingRequestTest {
   private static final String PERSON_A = "Person A";
   private static final String PERSON_B = "Person B";
   private static final String PERSON_C = "Person C";
-
+ private static final Collection<String> NO_OPT_ATTENDEES = Collections.emptySet();
   private static final int DURATION_1_HOUR = 60;
 
   @Test
   public void CantAddOptionalAttendeeWhoIsAlsoMandatory() {
-    MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_1_HOUR);
+    MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A),NO_OPT_ATTENDEES, DURATION_1_HOUR);
     request.addOptionalAttendee(PERSON_A);
 
     int actual = request.getOptionalAttendees().size();
