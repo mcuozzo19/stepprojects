@@ -8,53 +8,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <link rel ="stylesheet" href = "style.css">
+  <script src="script.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <style>
-* {
-  box-sizing: border-box;
-}
-
-/* Create two equal columns that floats next to each other */
-.column1 {
-  float: left;
-  width: 20%;
-  padding: 10px;
-  
-}
-.column2 {
-  float: left;
-  width: 80%;
-  padding: 10px;
-  
-}
-
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-</style>
 </head>
-<body>
+<body onload="loadPage()">
 
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Madeline Cuozzo</a>
+      <a class="navbar-brand" href="index.html">Madeline Cuozzo</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">About Me</a></li>
+      <li class="active"><a href="index.html">About Me</a></li>
       <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Hobbies<span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="#">Coding</a></li>
-          <li><a href="#">Sports</a></li>
-          <li><a href="#">Violin</a></li>
+          <li><a href="coding.html">Coding</a></li>
+          <li><a href="sports.html">Sports</a></li>
         </ul>
       </li>
-      <li><a href="./gallery.html">Gallery</a></li>
-      <li><a href="#">Contact Me</a></li>
+      <li><a href="./gallery.html" >Gallery</a></li>
+      <li><a href="contactMe.html">Contact Me</a></li>
     </ul>
   </div>
 </nav>
@@ -76,6 +50,34 @@
             Enjoy!</p>
         </div>
     </div>
+<div class="row">
+    <div class = "submitCom " id="submitComment">
+        <form action="/comment" method="POST" id="commentHere">
+            <h2>Leave a comment!</h2>
+            <ul class="form-style-1">
+                <li><label>Full Name <span class="required">*</span></label><input type="text" name="field1" class="field-divided" placeholder="First" /> <input type="text" name="field2" class="field-divided" placeholder="Last Initial" /></li>
+                <p>Comment:</p>
+                <textarea type="text" name="my-comment" value="Comment Here" class="field-long field-textarea"> </textarea>
+                <br><br>
+                <input type="submit" />
+             </ul>
+        </form>
+    </div>
+    <div class = "displayCom">
+        <div class="commentSection" id="comment-container"></div>
+        <form>
+            <h3>Comments</h3>
+            <label for="quantity">Display Comment Number (between 1 and 20):</label>
+            <input type="number" id="display" name="quantity" min="1" max="20">
+            <input type="submit">
+         </form> 
+    
+        <form action = "/delete" method = "POST">
+            <button type= "submit">Delete All Comments</button>
+        </form>
+        
+    </div>
+<div>        
 
 </div>
 </body>

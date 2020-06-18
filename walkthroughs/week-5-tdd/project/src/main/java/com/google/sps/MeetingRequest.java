@@ -30,9 +30,10 @@ public final class MeetingRequest {
   // The duration of the meeting in minutes.
   private final long duration;
 
-  public MeetingRequest(Collection<String> attendees, long duration) {
+  public MeetingRequest(Collection<String> attendees, Collection<String> optional_attendees, long duration) {
     this.duration = duration;
     this.attendees.addAll(attendees);
+    this.optional_attendees.addAll(optional_attendees);
   }
 
   /**

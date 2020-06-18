@@ -14,19 +14,93 @@
 
 package com.google.sps.servlets;
 
+
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
+import com.google.gson.Gson; 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/data")
+@WebServlet("/comment")
 public class DataServlet extends HttpServlet {
-
+ 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    response.getWriter().println("<h1>Hello world!</h1>");
+     String maxCommentsString = request.getParameter("maxComments");
+
+    // Convert the input to an int.
+    int maxComments = Integer.parseInt(maxCommentsString);;
+    
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+     Gson gson = new Gson();
+    ArrayList<String> comments = new ArrayList<>();
+    for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(maxComments))) {
+      if(entity.getProperty("text") instanceof String){
+         String text = (String) entity.getProperty("text");
+       String email = (String) entity.getProperty("email");
+       String message = email + " : " + text;      
+      comments.add(message); 
+      }
+      else{
+     System.out.println("not a string");
+    }
+    }
+
+    
+
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(comments));
+  }
+
+
+
+    @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+     UserService userService = UserServiceFactory.getUserService();
+      
+      if (!userService.isUserLoggedIn()) {
+      response.sendRedirect("/comment");
+      return;
+    }
+
+
+    // Get the input from the form.
+    String newComment = request.getParameter("my-comment");
+    String email = userService.getCurrentUser().getEmail();
+    long timestamp = System.currentTimeMillis();
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("text", newComment);
+    commentEntity.setProperty("timestamp", timestamp);
+    commentEntity.setProperty("email", email);
+    
+
+    
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
+    response.sendRedirect("/index.html");
   }
 }
+
+  
+
+
