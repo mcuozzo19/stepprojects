@@ -75,7 +75,7 @@ public final class FindMeetingQuery {
     return results;
   }
 public Collection<TimeRange> queryWithOptional(Collection<Event> events, MeetingRequest request) {
-
+    int minsPerDay =24*60
     ArrayList<String> attendees = new ArrayList<>(request.getAttendees());
     ArrayList<String> optAttendees= new ArrayList<>(request.getOptionalAttendees());
     for(String optAttendee: optAttendees){
@@ -91,13 +91,13 @@ public Collection<TimeRange> queryWithOptional(Collection<Event> events, Meeting
         return results;
     }
     if(events.size()==0){
-        results.add(TimeRange.fromStartDuration(0, 24*60));
+        results.add(TimeRange.fromStartDuration(0, minsPerDay));
         return results;
     }
     int currentStart = 0;
     int currentEnd = 0;
     for(int i = 0; i < eventList.size(); i++){ //MAKE FOREACH LOOP (Event event : events) {}
-         if(currentEnd==24*60){
+         if(currentEnd==minsPerDay){
                         return results;
                     }
         if(i - 1 >= 0 && eventList.get(i-1).getWhen().contains(eventList.get(i).getWhen())){
@@ -115,7 +115,7 @@ public Collection<TimeRange> queryWithOptional(Collection<Event> events, Meeting
                 }
                  currentStart= currentEnd+eventList.get(i).getWhen().duration();
                     currentEnd = currentStart;
-                    if(currentEnd==24*60){
+                    if(currentEnd==minsPerDay){
                         return results;
                     }
                 
@@ -123,7 +123,7 @@ public Collection<TimeRange> queryWithOptional(Collection<Event> events, Meeting
 
         }
     }
-    currentEnd=24*60;
+    currentEnd=minsPerDay;
     if(currentStart!=currentEnd && currentEnd-currentStart>=duration){
                     TimeRange possibleTime = TimeRange.fromStartEnd(currentStart, currentEnd, false);
                     results.add(possibleTime);
