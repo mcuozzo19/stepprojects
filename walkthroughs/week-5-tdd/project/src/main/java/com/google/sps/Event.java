@@ -104,7 +104,7 @@ public final class Event implements Comparable<Event> {
             return this.getWhen().start()-compareStart;
         }
         else{
-            return ((Event)compareTo).getWhen().end()-this.getWhen().end();
+            return this.getWhen().end()-((Event)compareTo).getWhen().end();
         }
 
     }

@@ -41,6 +41,9 @@ public final class FindMeetingQuery {
         }
         for (int j = 0; j < attendees.size(); j++ ){
             if (eventList.get(i).getAttendees().contains(attendees.get(j))){
+                if(eventList.get(i).getWhen()==TimeRange.WHOLE_DAY){
+                    return new ArrayList<TimeRange>();
+                }
                 currentEnd = eventList.get(i).getWhen().start();
                 if(currentStart!=currentEnd && currentEnd-currentStart>=duration){
                     TimeRange possibleTime = TimeRange.fromStartEnd(currentStart, currentEnd, false);
@@ -62,10 +65,12 @@ public final class FindMeetingQuery {
     }
     
     Collection<TimeRange> optResults = queryWithOptional(events, request);
-    if(results.size() > 0 && optResults.size() == 0){
+    if(optResults.size() == 0){
         return results;
     }
-
+    if(optResults.size() > 0 && results.size() == 0){
+        return optResults;
+    }
     results = intersection(results, optResults);
     return results;
   }
@@ -91,14 +96,18 @@ public Collection<TimeRange> queryWithOptional(Collection<Event> events, Meeting
     }
     int currentStart = 0;
     int currentEnd = 0;
-    for(int i = 0; i < eventList.size(); i++){
-    
+    for(int i = 0; i < eventList.size(); i++){ //MAKE FOREACH LOOP (Event event : events) {}
+         if(currentEnd==24*60){
+                        return results;
+                    }
         if(i - 1 >= 0 && eventList.get(i-1).getWhen().contains(eventList.get(i).getWhen())){
             continue;
         }
         for (int j = 0; j < attendees.size(); j++ ){
             if (eventList.get(i).getAttendees().contains(attendees.get(j))){
-                
+                if(eventList.get(i).getWhen()==TimeRange.WHOLE_DAY){
+                    return new ArrayList<TimeRange>();
+                }
                 currentEnd = eventList.get(i).getWhen().start();
                 if(currentStart!=currentEnd && currentEnd-currentStart>=duration){
                     TimeRange possibleTime = TimeRange.fromStartEnd(currentStart, currentEnd, false);
@@ -109,6 +118,7 @@ public Collection<TimeRange> queryWithOptional(Collection<Event> events, Meeting
                     if(currentEnd==24*60){
                         return results;
                     }
+                
             }
 
         }
