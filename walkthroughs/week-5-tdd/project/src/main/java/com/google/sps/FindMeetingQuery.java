@@ -19,13 +19,14 @@ import java.util.List;
 import java.util.*;
 
 public final class FindMeetingQuery {
+     final int minsPerDay = 1440;
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     ArrayList<String> attendees = new ArrayList<>(request.getAttendees());
     long duration = request.getDuration();
     Collection<TimeRange> results= new ArrayList<TimeRange>();
     ArrayList<Event> eventList = new ArrayList<>(events);
     Collections.sort(eventList);
-    int minsPerDay =24*60;
+   
     if (duration > TimeRange.WHOLE_DAY.duration()){
         return results;
     }
@@ -75,7 +76,7 @@ public final class FindMeetingQuery {
     return results;
   }
 public Collection<TimeRange> queryWithOptional(Collection<Event> events, MeetingRequest request) {
-    int minsPerDay =24*60
+   
     ArrayList<String> attendees = new ArrayList<>(request.getAttendees());
     ArrayList<String> optAttendees= new ArrayList<>(request.getOptionalAttendees());
     for(String optAttendee: optAttendees){
