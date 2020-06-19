@@ -39,8 +39,8 @@ public final class FindMeetingQuery {
         if(i - 1 >= 0 && eventList.get(i-1).getWhen().contains(eventList.get(i).getWhen())){
             continue;
         }
-        for (int j = 0; j < attendees.size(); j++ ){
-            if (eventList.get(i).getAttendees().contains(attendees.get(j))){
+        for (String attendee: attendees){
+            if (eventList.get(i).getAttendees().contains(attendee)){
                 if(eventList.get(i).getWhen()==TimeRange.WHOLE_DAY){
                     return new ArrayList<TimeRange>();
                 }
@@ -103,8 +103,8 @@ public Collection<TimeRange> queryWithOptional(Collection<Event> events, Meeting
         if(i - 1 >= 0 && eventList.get(i-1).getWhen().contains(eventList.get(i).getWhen())){
             continue;
         }
-        for (int j = 0; j < attendees.size(); j++ ){
-            if (eventList.get(i).getAttendees().contains(attendees.get(j))){
+        for (String attendee: attendees){
+            if (eventList.get(i).getAttendees().contains(attendee)){
                 if(eventList.get(i).getWhen()==TimeRange.WHOLE_DAY){
                     return new ArrayList<TimeRange>();
                 }
