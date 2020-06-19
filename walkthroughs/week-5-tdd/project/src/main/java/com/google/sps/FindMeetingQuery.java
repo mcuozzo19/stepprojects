@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.*;
 
 public final class FindMeetingQuery {
-     final int minsPerDay = 1440;
+     final static int minsPerDay = 1440;
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     ArrayList<String> attendees = new ArrayList<>(request.getAttendees());
     long duration = request.getDuration();
