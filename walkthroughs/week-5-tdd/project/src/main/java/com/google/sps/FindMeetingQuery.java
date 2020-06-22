@@ -19,13 +19,14 @@ import java.util.List;
 import java.util.*;
 
 public final class FindMeetingQuery {
+     final static int minsPerDay = 1440;
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     ArrayList<String> attendees = new ArrayList<>(request.getAttendees());
     long duration = request.getDuration();
     Collection<TimeRange> results= new ArrayList<TimeRange>();
     ArrayList<Event> eventList = new ArrayList<>(events);
     Collections.sort(eventList);
-    int minsPerDay =24*60;
+   
     if (duration > TimeRange.WHOLE_DAY.duration()){
         return results;
     }
@@ -39,8 +40,11 @@ public final class FindMeetingQuery {
         if(i - 1 >= 0 && eventList.get(i-1).getWhen().contains(eventList.get(i).getWhen())){
             continue;
         }
-        for (int j = 0; j < attendees.size(); j++ ){
-            if (eventList.get(i).getAttendees().contains(attendees.get(j))){
+        for (String attendee: attendees){
+            if (eventList.get(i).getAttendees().contains(attendee)){
+                if(eventList.get(i).getWhen()==TimeRange.WHOLE_DAY){
+                    return new ArrayList<TimeRange>();
+                }
                 currentEnd = eventList.get(i).getWhen().start();
                 if(currentStart!=currentEnd && currentEnd-currentStart>=duration){
                     TimeRange possibleTime = TimeRange.fromStartEnd(currentStart, currentEnd, false);
@@ -62,15 +66,17 @@ public final class FindMeetingQuery {
     }
     
     Collection<TimeRange> optResults = queryWithOptional(events, request);
-    if(results.size() > 0 && optResults.size() == 0){
+    if(optResults.size() == 0){
         return results;
     }
-
+    if(optResults.size() > 0 && results.size() == 0){
+        return optResults;
+    }
     results = intersection(results, optResults);
     return results;
   }
 public Collection<TimeRange> queryWithOptional(Collection<Event> events, MeetingRequest request) {
-
+   
     ArrayList<String> attendees = new ArrayList<>(request.getAttendees());
     ArrayList<String> optAttendees= new ArrayList<>(request.getOptionalAttendees());
     for(String optAttendee: optAttendees){
@@ -86,19 +92,23 @@ public Collection<TimeRange> queryWithOptional(Collection<Event> events, Meeting
         return results;
     }
     if(events.size()==0){
-        results.add(TimeRange.fromStartDuration(0, 24*60));
+        results.add(TimeRange.fromStartDuration(0, minsPerDay));
         return results;
     }
     int currentStart = 0;
     int currentEnd = 0;
-    for(int i = 0; i < eventList.size(); i++){
-    
+    for(int i = 0; i < eventList.size(); i++){ //MAKE FOREACH LOOP (Event event : events) {}
+         if(currentEnd==minsPerDay){
+                        return results;
+                    }
         if(i - 1 >= 0 && eventList.get(i-1).getWhen().contains(eventList.get(i).getWhen())){
             continue;
         }
-        for (int j = 0; j < attendees.size(); j++ ){
-            if (eventList.get(i).getAttendees().contains(attendees.get(j))){
-                
+        for (String attendee: attendees){
+            if (eventList.get(i).getAttendees().contains(attendee)){
+                if(eventList.get(i).getWhen()==TimeRange.WHOLE_DAY){
+                    return new ArrayList<TimeRange>();
+                }
                 currentEnd = eventList.get(i).getWhen().start();
                 if(currentStart!=currentEnd && currentEnd-currentStart>=duration){
                     TimeRange possibleTime = TimeRange.fromStartEnd(currentStart, currentEnd, false);
@@ -106,14 +116,15 @@ public Collection<TimeRange> queryWithOptional(Collection<Event> events, Meeting
                 }
                  currentStart= currentEnd+eventList.get(i).getWhen().duration();
                     currentEnd = currentStart;
-                    if(currentEnd==24*60){
+                    if(currentEnd==minsPerDay){
                         return results;
                     }
+                
             }
 
         }
     }
-    currentEnd=24*60;
+    currentEnd=minsPerDay;
     if(currentStart!=currentEnd && currentEnd-currentStart>=duration){
                     TimeRange possibleTime = TimeRange.fromStartEnd(currentStart, currentEnd, false);
                     results.add(possibleTime);

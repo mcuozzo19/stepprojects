@@ -299,8 +299,7 @@ public final class FindMeetingQueryTest {
 
     Collection<TimeRange> actual = query.query(events, request);
     Collection<TimeRange> expected =
-        Arrays.asList(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0800AM, false),
-            TimeRange.fromStartEnd(TIME_0830AM, TIME_0900AM, false),
+        Arrays.asList(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0900AM, false),
             TimeRange.fromStartEnd(TIME_0930AM, TimeRange.END_OF_DAY, true));
 
     Assert.assertEquals(expected, actual);
@@ -377,32 +376,24 @@ public final class FindMeetingQueryTest {
 
     Collection<TimeRange> actual = query.query(events, request);
     Collection<TimeRange> expected =
-        Arrays.asList(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0800AM, false),
-            TimeRange.fromStartEnd(TIME_0830AM, TIME_0900AM, false),
-            TimeRange.fromStartEnd(TIME_0930AM, TimeRange.END_OF_DAY, true));
+        Arrays.asList();
 
     Assert.assertEquals(expected, actual);
   }
  @Test
   public void onlyOptionalAttendeesNotAvailable() {
-    // Have each person have different events. We should see two options because each person has
-    // split the restricted times.
-    //
-    // Events  :       |--A--|     |--B--|
-    // Day     : |-----------------------------|
-    // Options : |--1--|     |--2--|     |--3--|
-
+    
     Collection<Event> events = Arrays.asList(
-        new Event("Event 1", TimeRange.WHOLE_DAY,
+        new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TimeRange.END_OF_DAY, true),
             Arrays.asList(PERSON_A)),
-        new Event("Event 2", TimeRange.WHOLE_DAY,
+        new Event("Event 2", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TimeRange.END_OF_DAY, true),
             Arrays.asList(PERSON_B)));
 
     MeetingRequest request =
         new MeetingRequest(NO_ATTENDEES, Arrays.asList(PERSON_A, PERSON_B), DURATION_30_MINUTES);
 
     Collection<TimeRange> actual = query.query(events, request);
-    Collection<TimeRange> expected = Arrays.asList();
+    Collection<TimeRange> expected = Arrays.asList(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TimeRange.END_OF_DAY, true));
     
 
     Assert.assertEquals(expected, actual);
